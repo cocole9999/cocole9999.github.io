@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+could not bind to address 0.0.0.0:443  
+no listening sockets available, shutting down  
+  
+在Apache安装完成后，启动时会出现如下情况：  
+  
+(OS 10048)通常每个套接字地址(协议/网络地址/端口)只允许使用一次。  
+  
+: make_sock: could not bind to address 0.0.0.0:80  
+no listening sockets available, shutting down  
+Unable to open logs  
+  
+解决办法是：  
+  
+  
+      通过 netstat -a -o 查看端口占用情况，关闭调用相关端口的进程。  
+c:\>netstat -a -o  
+Active Connections  
+Proto Local Address          Foreign Address        State           PID  
+TCP    zhengrf:1728           localhost:30000        ESTABLISHED     5384  
+TCP    zhengrf:1755           localhost:ftp          ESTABLISHED     1848  
+TCP    zhengrf:2464           125.39.102.136:http    TIME_WAIT       0  
+TCP    zhengrf:2465           60.190.203.150:http    ESTABLISHED     4676  
+TCP    zhengrf:2466           60.190.203.150:http    ESTABLISHED     4676  
+TCP    zhengrf:2467           60.190.203.150:http    ESTABLISHED     4676  
+TCP    zhengrf:2468           60.190.203.150:http    ESTABLISHED     4676  
+  
+      http默认用的是80端口，通过该http协议去查看对应的PID。  
+      通过打开“进程管理器”，发现PID=4676的进程号所对应的是迅雷的一个端口号。  
+      查看迅雷的端口设置，“配置”→“BT/端口设置”，可以看到TCP端口使用的是 80号端口。点击一下“随机生成”，或者 关闭迅雷。再启动 Apache，一切就OK了。  
+
+Error: Apache shutdown unexpectedly.  Apache服务器不能启动，一般是端口被占用，按照上面的方法释放被占用的端口，一般就能解决。
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<p>could not bind to address 0.0.0.0:443 <br>
+no listening sockets available, shutting down  </p>
+
+<p>在Apache安装完成后，启动时会出现如下情况：  </p>
+
+<p>(OS 10048)通常每个套接字地址(协议/网络地址/端口)只允许使用一次。  </p>
+
+<p>: make_sock: could not bind to address 0.0.0.0:80 <br>
+no listening sockets available, shutting down <br>
+Unable to open logs  </p>
+
+<p>解决办法是：  </p>
+
+<pre><code>  通过 netstat -a -o 查看端口占用情况，关闭调用相关端口的进程。  
+</code></pre>
+
+<p>c:&gt;netstat -a -o <br>
+Active Connections <br>
+Proto Local Address          Foreign Address        State           PID <br>
+TCP    zhengrf:1728           localhost:30000        ESTABLISHED     5384 <br>
+TCP    zhengrf:1755           localhost:ftp          ESTABLISHED     1848 <br>
+TCP    zhengrf:2464           125.39.102.136:http    TIME_WAIT       0 <br>
+TCP    zhengrf:2465           60.190.203.150:http    ESTABLISHED     4676 <br>
+TCP    zhengrf:2466           60.190.203.150:http    ESTABLISHED     4676 <br>
+TCP    zhengrf:2467           60.190.203.150:http    ESTABLISHED     4676 <br>
+TCP    zhengrf:2468           60.190.203.150:http    ESTABLISHED     4676  </p>
+
+<pre><code>  http默认用的是80端口，通过该http协议去查看对应的PID。  
+  通过打开“进程管理器”，发现PID=4676的进程号所对应的是迅雷的一个端口号。  
+  查看迅雷的端口设置，“配置”→“BT/端口设置”，可以看到TCP端口使用的是 80号端口。点击一下“随机生成”，或者 关闭迅雷。再启动 Apache，一切就OK了。  
+</code></pre>
+
+<p>Error: Apache shutdown unexpectedly.  Apache服务器不能启动，一般是端口被占用，按照上面的方法释放被占用的端口，一般就能解决。</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "apcheserver.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
